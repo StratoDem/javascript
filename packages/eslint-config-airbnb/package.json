@@ -1,15 +1,18 @@
 {
   "name": "eslint-config-airbnb",
-  "version": "9.0.1",
+  "version": "15.0.2",
   "description": "Airbnb's ESLint config, following our styleguide",
   "main": "index.js",
   "scripts": {
+    "prelint": "editorconfig-tools check * rules/* test/*",
     "lint": "eslint .",
     "tests-only": "babel-tape-runner ./test/test-*.js",
-    "prepublish": "not-in-install && (eslint-find-rules --unused && npm test) || in-install",
+    "prepublish": "(in-install || eslint-find-rules --unused) && (not-in-publish || npm test) && safe-publish-latest",
     "pretest": "npm run --silent lint",
     "test": "npm run --silent tests-only",
-    "travis": "cd ../eslint-config-airbnb-base && npm link && cd - && npm link eslint-config-airbnb-base && npm run --silent test ; npm unlink eslint-config-airbnb-base >/dev/null &"
+    "pretravis": "cd ../eslint-config-airbnb-base && npm install && npm link && cd - && npm link --no-save eslint-config-airbnb-base",
+    "travis": "npm run --silent test",
+    "posttravis": "npm unlink eslint-config-airbnb-base >/dev/null &"
   },
   "repository": {
     "type": "git",
@@ -45,23 +48,29 @@
   },
   "homepage": "https://github.com/airbnb/javascript",
   "dependencies": {
-    "eslint-config-airbnb-base": "^3.0.1"
+    "eslint-config-airbnb-base": "^11.2.0"
   },
   "devDependencies": {
-    "babel-tape-runner": "^1.3.1",
-    "eslint": "^2.10.2",
-    "eslint-find-rules": "^1.9.2",
-    "eslint-plugin-import": "^1.8.0",
-    "eslint-plugin-jsx-a11y": "^1.2.2",
-    "eslint-plugin-react": "^5.1.1",
+    "babel-preset-airbnb": "^2.4.0",
+    "babel-tape-runner": "^2.0.1",
+    "editorconfig-tools": "^0.1.1",
+    "eslint": "^3.19.0",
+    "eslint-find-rules": "^3.1.1",
+    "eslint-plugin-import": "^2.6.1",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.1.0",
+    "in-publish": "^2.0.0",
     "react": ">= 0.13.0",
-    "tape": "^4.5.1",
-    "in-publish": "^2.0.0"
+    "safe-publish-latest": "^1.1.1",
+    "tape": "^4.7.0"
   },
   "peerDependencies": {
-    "eslint": "^2.10.2",
-    "eslint-plugin-jsx-a11y": "^1.2.2",
-    "eslint-plugin-import": "^1.8.0",
-    "eslint-plugin-react": "^5.1.1"
+    "eslint": "^3.19.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-import": "^2.6.1",
+    "eslint-plugin-react": "^7.1.0"
+  },
+  "engines": {
+    "node": ">= 4"
   }
 }
